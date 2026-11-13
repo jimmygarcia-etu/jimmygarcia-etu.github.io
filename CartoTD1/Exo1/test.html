@@ -4,6 +4,7 @@
 <title>Exercice 1</title>
 </head>
 <body>
+    <h1>getCurrentPosition() : </h1>
 <h2>Lon : </h2>
   <p id="lon">  </p>
 <h2>Lat : </h2>
@@ -13,15 +14,26 @@
   <p id="alt">  </p>
   <h2>Precision : </h2>
   <p id="acc">  </p>
+
+      <h1>watchPosition() : </h1>
+<h2>Lon : </h2>
+  <p id="lonw">  </p>
+<h2>Lat : </h2>
+  <p id="latw">  </p>
+
+  <h2>Altitude : </h2>
+  <p id="altw">  </p>
+  <h2>Precision : </h2>
+  <p id="accw">  </p>
   
   
 <p id="status"></p>
-<a id="map-link" href="" target="_blank">Location unknown</a>
 
   <script>
 
     if ("geolocation" in navigator) {
   geoFindMe();
+  geoWatchMe();
 } else {
   /* geolocation IS NOT available */
 }
@@ -63,6 +75,49 @@ function geoFindMe() {
     status.textContent = "Locating…";
     navigator.geolocation.getCurrentPosition(success, error);
   }
+
+  
+}
+
+function geoWatchMe() {
+  const status = document.querySelector("#status");
+  const lon = document.querySelector("#lonw");
+  const lat = document.querySelector("#latw");
+  const alt = document.querySelector("#altw");
+  const acc = document.querySelector("#accw");
+
+  status.textContent = "";
+  lon.textContent = "";
+  lat.textContent = "";
+  alt.textContent = "";
+  acc.textContent = "";
+
+ 
+  function success(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    const altitude = position.coords.altitude;
+    const accuracy = position.coords.accuracy;
+
+    status.textContent = "";
+    lon.textContent = `${longitude} °`;
+    lat.textContent = `${latitude} °`;
+    alt.textContent = `${altitude} metres`;
+    acc.textContent = `${accuracy} metres`;
+  }
+
+  function error() {
+    status.textContent = "Unable to retrieve your location";
+  }
+
+  if (!navigator.geolocation) {
+    status.textContent = "Geolocation is not supported by your browser";
+  } else {
+    status.textContent = "Locating…";
+    navigator.geolocation.watchPosition(success, error);
+  }
+
+  
 }
   </script>
 </body>
